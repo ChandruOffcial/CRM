@@ -1,13 +1,14 @@
 const userModel = require("../model/userModel");
-const { hashedPassword, comparePassword } = require("../helper/auth");
-const jwt = require("jsonwebtoken");
+const authHelper = require("../helper/auth");
+const otpGenerator = require("otp-generator");
 
 /** POST: http://localhost:8000/api/register 
  * @param : {
   "userName": "Chandru",
   "email":"test@gmail.com",
   "password":"123456",
-  "roll":"Admin"
+  "roll":"admin",
+  "OTP":""
 }
 */
 const registerUser = async (req, res) => {
@@ -36,7 +37,7 @@ const registerUser = async (req, res) => {
       return res.status(409).json({ error: "Username is already taken" });
     }
 
-    const hashpassword = await hashedPassword(password);
+    const hashpassword = await authHelper.hashedPassword(password);
 
     const user = await userModel.create({
       userName,
@@ -55,13 +56,12 @@ const registerUser = async (req, res) => {
   }
 };
 
-/** POST: http://localhost:8000/api/login 
+/** POST: http://localhost:8000/api/login
  * @param : {
   "userName": "Chandru",  
   "password":"123456"
 }
 */
-
 const loginUser = async (req, res) => {
   try {
     const { userName, password } = req.body;
@@ -79,23 +79,17 @@ const loginUser = async (req, res) => {
     }
 
     // compare Password
-    const match = await comparePassword(password, user.password);
+    const match = await authHelper.comparePassword(password, user.password);
     if (!match) {
       return res.status(401).json({ error: "Incorrect username or password" });
     }
+
+    //WebToken
     if (match) {
-      const token = jwt.sign(
-        {
-          id: user._id,
-          userName: user.userName,
-          roll: user.roll,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "1hr" }
-      );
-      return res
-        .status(200)
-        .json({ message: "Authentication successful", token });
+      const token = await authHelper.generateToken(user);
+      console.log(token);
+      res.cookie("token", token);
+      return res.status(200).json({ message: "Authentication successful" });
     }
   } catch (error) {
     console.error("Error During Login");
@@ -103,7 +97,103 @@ const loginUser = async (req, res) => {
   }
 };
 
+/** POST: http://localhost:8000/api/forgotPassword 
+ * @param : {
+  "userName": "Chandru"  
+}
+*/
+const generateOTP = async (req, res) => {
+  try {
+    const user = req.user;
+
+    // Generate OTP
+    const OTP = otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      specialChars: false,
+      lowerCaseAlphabets: false,
+    });
+    const userId = user._id;
+    // Update OTP
+    await userModel.findByIdAndUpdate(userId, { OTP: OTP });
+    //Set Cookie
+
+    const forgotPass = await authHelper.generateToken(user);
+    res.cookie("forgotPass", forgotPass);
+    return res.status(201).json({ OTP: OTP });
+  } catch (error) {
+    console.error("Error During Generate OTP:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+/** POST: http://localhost:8000/api/verifyOTP
+ {
+    "OTP": "346594"
+  }
+*/
+const verifyOTP = async (req, res) => {
+  try {
+    const { userName } = req.user;
+    console.log(userName);
+    const userOtp = await userModel.findOne({ userName });
+    const db_OTP = userOtp.OTP;
+    const req_OTP = req.body.OTP;
+
+    if (parseInt(db_OTP) === parseInt(req_OTP)) {
+      // res.cookie("forgotPass", "", { maxAge: 0 });
+
+      return res.status(200).json({ message: "OTP Verifiyed" });
+    }
+
+    return res.status(400).json({ message: "Invalid OTP" });
+  } catch (error) {
+    console.error("Error During Verify OTP");
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+/** POST: http://localhost:8000/api/resetPassword
+ @param :{
+  "newPassword" : "Chandru23"
+  "confirm_pwd" : "Chandru23"
+ }
+ */
+const updatePassword = async (req, res) => {
+  try {
+    const { userName } = req.user;
+    const { newPassword, confirm_pwd } = req.body;
+    if (!userName) {
+      return res.status(401).json({ error: "Unauthorized User" });
+    }
+
+    // Check All Field
+    if (!newPassword || !confirm_pwd) {
+      return res.status(400).json({
+        error: "All fields are required ",
+      });
+    } else if (newPassword.includes(" ") || confirm_pwd.includes(" ")) {
+      return res
+        .status(400)
+        .json({ error: "Enter valid newPassword and confirm_pwd" });
+    }
+    // Password Match
+    if (newPassword === confirm_pwd) {
+      const hashpassword = await authHelper.hashedPassword(newPassword);
+      const userId = user._id;
+      await userModel.findByIdAndUpdate(userId, { password: hashpassword });
+      return res.status(201).json({ message: "Password Update Successfull" });
+    }
+    return res.status(400).json({ message: "Password don't match" });
+  } catch (error) {
+    console.log("Error During Update Password");
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  generateOTP,
+  verifyOTP,
+  updatePassword,
 };

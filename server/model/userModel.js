@@ -30,6 +30,7 @@ const userSchema = new Schema({
     required: true,
     enum: ["superadmin", "admin", "employee"],
   },
+  OTP: Number,
   createdAt: {
     type: Date,
     default: Date.now,
