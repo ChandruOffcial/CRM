@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
     });
 
     return res
-      .status(200)
+      .status(201)
       .json({ message: "Register successful", userDetails: user });
   } catch (error) {
     // Log the error for debugging purposes
@@ -87,7 +87,6 @@ const loginUser = async (req, res) => {
     //WebToken
     if (match) {
       const token = await authHelper.generateToken(user);
-      console.log(token);
       res.cookie("token", token);
       return res.status(200).json({ message: "Authentication successful" });
     }
@@ -119,7 +118,9 @@ const generateOTP = async (req, res) => {
 
     const forgotPass = await authHelper.generateToken(user);
     res.cookie("forgotPass", forgotPass);
-    return res.status(201).json({ OTP: OTP });
+    return res
+      .status(201)
+      .json({ message: "OTP Sent Check Your Registed Email..", OTP: OTP });
   } catch (error) {
     console.error("Error During Generate OTP:", error);
     return res.status(500).json({ error: "Internal Server Error" });

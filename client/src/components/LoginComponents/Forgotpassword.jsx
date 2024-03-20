@@ -2,9 +2,12 @@
 import { useFormik } from 'formik';
 import { Toaster } from "react-hot-toast"
 import { UsernameVerify } from "../../helper/ValidateUsername"
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Forgotpassword = () => {
-
+    const navigate = useNavigate()
     const formik = useFormik({
         initialValues: {
             userName: '',
@@ -13,8 +16,23 @@ const Forgotpassword = () => {
         validate: UsernameVerify,
         validateOnBlur: false,
         validateOnChange: false,
-        onSubmit: async values => {
-            console.log(values)
+        onSubmit: async (values, { resetForm }) => {
+            try {
+                const response = await axios.post(`/api/forgotPassword`, values)
+                toast.success(response.data.message);
+                resetForm();
+                setTimeout(() => {
+                    navigate('/login/verification')
+                }, 2000)
+
+            } catch (error) {
+                if (error.response) {
+                    console.log(error.response)
+                    toast.error(error.response.data.error);
+                } else {
+                    console.error('An unexpected error occurred:', error);
+                }
+            }
         },
     })
     return (

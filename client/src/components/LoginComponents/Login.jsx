@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom"
 import { useFormik } from 'formik';
-import { Toaster } from "react-hot-toast"
+import toast, { Toaster } from "react-hot-toast"
 import { loginVerify } from "../../helper/ValidateLogin"
+import bgImage from "../../assets/bg.png";
+import axios from "axios";
 
 
 const Login = () => {
@@ -13,12 +15,29 @@ const Login = () => {
         validate: loginVerify,
         validateOnBlur: false,
         validateOnChange: false,
-        onSubmit: async values => {
-            console.log(values)
+        onSubmit: async (values, { resetForm }) => {
+            try {
+                const response = await axios.post(`/api/login`, values);
+                toast.success(response.data.message);
+                resetForm();
+
+            } catch (error) {
+                if (error.response) {
+                    toast.error(error.response.data.error);
+                } else {
+                    console.error('An unexpected error occurred:', error);
+                }
+            }
         },
     });
+    const bg_style = {
+        backgroundImage: `url(${bgImage})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat'
+    };
     return (
-        <div className="h-screen flex  justify-center items-center  bg-background relative">
+        <div className="h-screen flex  justify-center items-center  bg-background relative login-container" style={bg_style}>
             <Toaster
                 position="top-center"
                 reverseOrder={false} />

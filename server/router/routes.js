@@ -4,13 +4,6 @@ const cors = require("cors");
 const authController = require("../controller/authController");
 const authMiddleware = require("../Middleware/authMiddleware");
 
-router.use(
-  cors({
-    credentials: true,
-    origin: "",
-  })
-);
-
 /** POST  */
 router.post("/api/register", authController.registerUser); // Register User
 router.post("/api/login", authController.loginUser); // Login

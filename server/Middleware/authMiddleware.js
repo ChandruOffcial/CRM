@@ -31,7 +31,7 @@ const verifyUser = async (req, res, next) => {
     const { userName } = req.body;
     const user = await userModel.findOne({ userName });
     if (!user) {
-      return res.status(404).json({ message: "UserName Not Found" });
+      return res.status(404).json({ error: "UserName Not Found" });
     } else {
       req.user = user;
       next();

@@ -10,12 +10,19 @@ const cookieParser = require("cookie-parser");
 /** Middleware */
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  })
+);
 app.use("/", require("./router/routes"));
 app.use(morgan("tiny"));
 app.use(cookieParser());
 
 app.disable("x-powered-by");
+app.options("*", cors());
 
 mongoose
   .connect(process.env.DATA_BASE)
