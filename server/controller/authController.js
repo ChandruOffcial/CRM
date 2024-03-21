@@ -1,11 +1,12 @@
 const userModel = require("../model/userModel");
 const authHelper = require("../helper/auth");
 const otpGenerator = require("otp-generator");
+const nodemailer = require("nodemailer");
 
 /** POST: http://localhost:8000/api/register 
  * @param : {
   "userName": "Chandru",
-  "email":"test@gmail.com",
+  "email":"justin.scratch.7@gmail.com",
   "password":"123456",
   "roll":"admin",
   "OTP":""
@@ -118,9 +119,36 @@ const generateOTP = async (req, res) => {
 
     const forgotPass = await authHelper.generateToken(user);
     res.cookie("forgotPass", forgotPass);
-    return res
-      .status(201)
-      .json({ message: "OTP Sent Check Your Registed Email..", OTP: OTP });
+
+    // Sent Email
+
+    let config = {
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+    };
+
+    let message = {
+      from: process.env.EMAIL, // sender address
+      to: user.email, // list of receivers
+      subject: "OTP", // Subject line
+      text: "OTP", // plain text body
+      html: `<b>Your Reset OTP :</b> ${OTP}`, // html body
+    };
+
+    let transporter = nodemailer.createTransport(config);
+    await transporter
+      .sendMail(message)
+      .then(() => {
+        return res
+          .status(201)
+          .json({ message: "OTP Sent Check Your Registed Email..", OTP: OTP });
+      })
+      .catch((err) => {
+        console.error("Error During Generate OTP:", err);
+      });
   } catch (error) {
     console.error("Error During Generate OTP:", error);
     return res.status(500).json({ error: "Internal Server Error" });
