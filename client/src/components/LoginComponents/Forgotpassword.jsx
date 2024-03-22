@@ -5,9 +5,17 @@ import { UsernameVerify } from "../../helper/ValidateUsername"
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import bgImage from "../../assets/bg.png";
+
 
 const Forgotpassword = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const bg_style = {
+        backgroundImage: `url(${bgImage})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat'
+    };
     const formik = useFormik({
         initialValues: {
             userName: '',
@@ -23,11 +31,10 @@ const Forgotpassword = () => {
                 resetForm();
                 setTimeout(() => {
                     navigate('/login/verification')
-                }, 2000)
+                }, 1000)
 
             } catch (error) {
                 if (error.response) {
-                    console.log(error.response)
                     toast.error(error.response.data.error);
                 } else {
                     console.error('An unexpected error occurred:', error);
@@ -36,7 +43,7 @@ const Forgotpassword = () => {
         },
     })
     return (
-        <div className="h-screen flex  justify-center items-center  bg-background relative">
+        <div className="h-screen flex  justify-center items-center  bg-background relative" style={bg_style}>
             <Toaster
                 position="top-center"
                 reverseOrder={false} />

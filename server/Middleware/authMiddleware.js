@@ -8,6 +8,7 @@ const verifyRoll = async (req, res, next) => {
         .status(401)
         .json({ error: "Unauthorized User: No token provided" });
     }
+    console.log(req.Headers);
     const token = req.headers.cookie.split("=")[1];
     await jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {

@@ -2,10 +2,21 @@
 import { useFormik } from 'formik';
 import { Toaster } from "react-hot-toast"
 import { verifyPWD } from "../../helper/ValidateNewPwd"
+import bgImage from "../../assets/bg.png";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 
 
 const NewPassword = () => {
+    const navigate = useNavigate();
+    const bg_style = {
+        backgroundImage: `url(${bgImage})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat'
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -15,12 +26,17 @@ const NewPassword = () => {
         validate: verifyPWD,
         validateOnBlur: false,
         validateOnChange: false,
-        onSubmit: async values => {
-            console.log(values)
+        onSubmit: async (values, { resetForm }) => {
+            const response = await axios.post(`/api/resetPassword`, values)
+            toast.success(response.data.message);
+            resetForm();
+            setTimeout(() => {
+                navigate('/login')
+            }, 1000)
         },
     });
     return (
-        <div className="h-screen flex  justify-center items-center  bg-background relative">
+        <div className="h-screen flex  justify-center items-center  bg-background relative" style={bg_style}>
             <Toaster
                 position="top-center"
                 reverseOrder={false} />

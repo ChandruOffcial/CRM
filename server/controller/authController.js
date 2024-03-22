@@ -88,6 +88,7 @@ const loginUser = async (req, res) => {
     //WebToken
     if (match) {
       const token = await authHelper.generateToken(user);
+      res.clearCookie("token");
       res.cookie("token", token);
       return res.status(200).json({ message: "Authentication successful" });
     }
@@ -117,6 +118,8 @@ const generateOTP = async (req, res) => {
     await userModel.findByIdAndUpdate(userId, { OTP: OTP });
     //Set Cookie
 
+    res.clearCookie("forgotPass");
+    res.clearCookie("token");
     const forgotPass = await authHelper.generateToken(user);
     res.cookie("forgotPass", forgotPass);
 
@@ -189,6 +192,7 @@ const verifyOTP = async (req, res) => {
  */
 const updatePassword = async (req, res) => {
   try {
+    console.log(req.user);
     const { userName } = req.user;
     const { newPassword, confirm_pwd } = req.body;
     if (!userName) {
@@ -205,16 +209,31 @@ const updatePassword = async (req, res) => {
         .status(400)
         .json({ error: "Enter valid newPassword and confirm_pwd" });
     }
+
     // Password Match
     if (newPassword === confirm_pwd) {
       const hashpassword = await authHelper.hashedPassword(newPassword);
-      const userId = user._id;
-      await userModel.findByIdAndUpdate(userId, { password: hashpassword });
+      const userId = req.user.id;
+      console.log(hashpassword);
+
+      const updatedUser = await userModel.findOneAndUpdate(
+        { _id: userId },
+        { password: hashpassword },
+        { new: true } // Return the updated document
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.clearCookie("token");
+      res.clearCookie("forgotPass");
       return res.status(201).json({ message: "Password Update Successfull" });
     }
+
     return res.status(400).json({ message: "Password don't match" });
   } catch (error) {
-    console.log("Error During Update Password");
+    console.log("Error During Update Password", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
