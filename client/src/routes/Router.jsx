@@ -6,6 +6,7 @@ import VerifyOTP from "../components/LoginComponents/VerifyOTP"
 import NewPassword from "../components/LoginComponents/NewPassword"
 import Dashbord from "../pages/Dashbord";
 import DashbordContainer from "../components/DashBord/DashbordContainer";
+import Employee from "../components/DashBord/Employee";
 
 const router = createBrowserRouter([
 
@@ -13,7 +14,7 @@ const router = createBrowserRouter([
         path: "/",
         children: [
             {
-                path: "/login",
+                path: "/",
                 element: <Login />,
             },
             {
@@ -39,7 +40,10 @@ const router = createBrowserRouter([
                 path: "/dashbord",
                 element: <DashbordContainer />,
             },
-
+            {
+                path: "/dashbord/employee",
+                element: <Employee />,
+            },
         ]
     },
 

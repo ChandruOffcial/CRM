@@ -4,8 +4,8 @@ import { DataTable } from "./DataTable";
 import DropDown from "./DropDown";
 
 
-const DashboardContainer = () => {
-    const [showDataTable, setShowDataTable] = useState(true);
+const Employee = () => {
+    const [showDataTable, setShowDataTable] = useState(false);
 
     const handleDropDownClick = () => {
         setShowDataTable(false);
@@ -21,4 +21,4 @@ const DashboardContainer = () => {
     );
 };
 
-export default DashboardContainer;
+export default Employee;

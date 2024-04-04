@@ -21,9 +21,7 @@ const registerUser = async (req, res) => {
         error: "All fields are required ",
       });
     } else if (userName.includes(" ") || password.includes(" ")) {
-      return res
-        .status(400)
-        .json({ error: "Enter valid username and password" });
+      return res.status(400).json({ error: "Enter valid username and password" });
     }
 
     // Check if email already exists
@@ -47,9 +45,7 @@ const registerUser = async (req, res) => {
       email,
     });
 
-    return res
-      .status(201)
-      .json({ message: "Register successful", userDetails: user });
+    return res.status(201).json({ message: "Register successful", userDetails: user });
   } catch (error) {
     // Log the error for debugging purposes
     console.error("Error during Register:", error);
@@ -145,9 +141,7 @@ const generateOTP = async (req, res) => {
     await transporter
       .sendMail(message)
       .then(() => {
-        return res
-          .status(201)
-          .json({ message: "OTP Sent Check Your Registed Email..", OTP: OTP });
+        return res.status(201).json({ message: "OTP Sent Check Your Registed Email..", OTP: OTP });
       })
       .catch((err) => {
         console.error("Error During Generate OTP:", err);
@@ -205,9 +199,7 @@ const updatePassword = async (req, res) => {
         error: "All fields are required ",
       });
     } else if (newPassword.includes(" ") || confirm_pwd.includes(" ")) {
-      return res
-        .status(400)
-        .json({ error: "Enter valid newPassword and confirm_pwd" });
+      return res.status(400).json({ error: "Enter valid newPassword and confirm_pwd" });
     }
 
     // Password Match
