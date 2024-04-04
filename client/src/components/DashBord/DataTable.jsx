@@ -1,55 +1,12 @@
 import MUIDataTable from "mui-datatables";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { MdDelete } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import PropTypes from 'prop-types';
 
-export const DataTable = () => {
-    const columns = [
-        {
-            name: "name",
-            label: "Employees Name",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "company",
-            label: "Email Address",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "city",
-            label: "Role",
-            options: {
-                filter: true,
-                sort: false,
-            }
-        },
-        {
-            name: "state",
-            label: "Action",
-            options: {
-                filter: true,
-                sort: false,
-                customBodyRender: () =>
-                    <div className="flex gap-5 justify-center items-center  ">
-                        <FaEdit className="text-blue-600 h-6 w-6" />
-                        <MdDelete className="text-red-600 h-7 w-7" />
-                    </div>
-            },
-        },
-    ];
 
-    const data = [
-        { name: "Joe James", company: "Test Corp", city: "Yonkers", state: "" },
-        { name: "John Walsh", company: "Test Corp", city: "Hartford", state: "" },
-        { name: "Bob Herm", company: "Test Corp", city: "Tampa", state: "" },
-        { name: "James Houston", company: "Test Corp", city: "Dallas", state: "" },
-    ];
+const DataTable = ({ columData, tableData }) => {
+
+
+
 
     const options = {
         search: false,
@@ -117,8 +74,8 @@ export const DataTable = () => {
                     <ThemeProvider theme={getMuiTheme()}>
                         <MUIDataTable
 
-                            data={data}
-                            columns={columns}
+                            data={tableData}
+                            columns={columData}
                             options={options}
                         />
                     </ThemeProvider>
@@ -128,4 +85,11 @@ export const DataTable = () => {
 
         </div>
     )
+
 }
+DataTable.propTypes = {
+    columData: PropTypes.array.isRequired,
+    tableData: PropTypes.array.isRequired
+};
+
+export default DataTable
