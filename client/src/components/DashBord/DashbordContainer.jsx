@@ -4,13 +4,15 @@ import DataTable from "./DataTable";
 import DropDown from "./DropDown";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 
 const DashboardContainer = () => {
     const [showDataTable, setShowDataTable] = useState(true);
-
+    const navigate = useNavigate();
     const handleDropDownClick = () => {
         setShowDataTable(false);
+        navigate('/dashbord/employee');
     };
     const handleShowDataTable = () => {
         setShowDataTable(true);
@@ -65,13 +67,15 @@ const DashboardContainer = () => {
 
     return (
         <div className="w-screen h-screen bg-[#EDEEFF] relative">
-            <DropDown
-                handleDropDownClick={handleDropDownClick}
-                handleShowDataTable={handleShowDataTable}
-                dropDown={true}
-                selectedItemValue={0}
-            />
-            {showDataTable && <DataTable columData={columns} tableData={data} />}
+            <div className="container mx-auto">
+                <DropDown
+                    handleDropDownClick={handleDropDownClick}
+                    handleShowDataTable={handleShowDataTable}
+                    dropDown={true}
+                    selectedItemValue={0}
+                />
+                {showDataTable && <DataTable columData={columns} tableData={data} tableHeading={'Employees'} tablePara={'Here is a list of all employees'} />}
+            </div>
         </div>
     );
 };

@@ -49,5 +49,6 @@ Project(Task Assign)
     Duration
         Day
         Hours
+min
 
         

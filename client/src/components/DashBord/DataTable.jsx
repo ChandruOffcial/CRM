@@ -3,11 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
 
-const DataTable = ({ columData, tableData }) => {
-
-
-
-
+const DataTable = ({ columData, tableData, tableHeading, tablePara }) => {
     const options = {
         search: false,
         download: false,
@@ -67,13 +63,12 @@ const DataTable = ({ columData, tableData }) => {
         <div className="container mx-auto">
             <div className="flex justify-center items-center flex-col">
                 <div className="mb-10">
-                    <h2 className="font-semibold text-xl text-center mb-2">Employees</h2>
-                    <p className="text-center">Here is a list of all employees</p>
+                    <h2 className="font-semibold text-xl text-center mb-2">{tableHeading}</h2>
+                    <p className="text-center">{tablePara}</p>
                 </div>
                 <div className="w-full">
                     <ThemeProvider theme={getMuiTheme()}>
                         <MUIDataTable
-
                             data={tableData}
                             columns={columData}
                             options={options}
@@ -89,7 +84,9 @@ const DataTable = ({ columData, tableData }) => {
 }
 DataTable.propTypes = {
     columData: PropTypes.array.isRequired,
-    tableData: PropTypes.array.isRequired
+    tableData: PropTypes.array.isRequired,
+    tableHeading: PropTypes.string,
+    tablePara: PropTypes.string
 };
 
 export default DataTable
