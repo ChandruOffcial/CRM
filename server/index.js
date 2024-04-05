@@ -17,6 +17,7 @@ app.use(
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   })
 );
+
 app.use("/", require("./router/routes"));
 app.use(morgan("tiny"));
 app.use(cookieParser());

@@ -1,0 +1,53 @@
+#Admin
+
+Employee Model
+
+    UserId
+    UserName
+    EmailId
+    Designation
+    Salary
+    Photo
+    Certificate
+
+
+Leave Model
+
+    UserId
+    UserName
+    LeaveDate
+    From(Hrs)
+    To(Hrs)
+    Action
+
+Announcement Model
+
+    S.no
+    Date
+    Reason
+
+Attendance Model
+
+    UserId
+    UserName
+    TimeIn
+    TimeOut
+    Permission
+
+Company Document
+
+    S.no
+    UpdateDate
+    DocumentName
+
+Project(Task Assign)
+
+    S.no
+    Project Name
+    Task
+    CompletedBy
+    Duration
+        Day
+        Hours
+
+        
