@@ -1,5 +1,4 @@
 
-import DropDown from "./DropDown";
 import DataTable from "./DataTable";
 import ThemeButton from "../../assets/Theme/Button";
 import { MdModeEditOutline } from "react-icons/md";
@@ -67,11 +66,7 @@ const DashboardContainer = () => {
 
     return (
         <div className="w-screen h-screen bg-[#EDEEFF] relative">
-            <div className="container mx-auto flex justify-between items-baseline gap-7">
-                <DropDown
-                    dropDown={false}
-                    selectedItemValue={0}
-                />
+            <div className="container mx-auto flex justify-between items-baseline gap-7">             
                 <div className={` flex flex-col w-full mt-4 justify-end items-end`}>
                     <div className="inline-flex  bg-[#4886FF] px-9 py-4 rounded-2xl">
                         <p className="text-white cursor-pointer">+ Add new user</p>

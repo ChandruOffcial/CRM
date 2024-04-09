@@ -5,8 +5,8 @@ import Forgotpassword from "../components/LoginComponents/Forgotpassword"
 import VerifyOTP from "../components/LoginComponents/VerifyOTP"
 import NewPassword from "../components/LoginComponents/NewPassword"
 import Dashbord from "../pages/Dashbord";
-import DashbordContainer from "../components/DashBord/DashbordContainer";
 import Employee from "../components/DashBord/Employee";
+import { DataProvider } from "../Context/DataContext";
 
 const router = createBrowserRouter([
 
@@ -34,12 +34,8 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashbord",
-        element: <Dashbord />,
-        children: [
-            {
-                path: "/dashbord",
-                element: <DashbordContainer />,
-            },
+        element: <DataProvider><Dashbord /></DataProvider>,
+        children: [        
             {
                 path: "/dashbord/employee",
                 element: <Employee />,
