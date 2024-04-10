@@ -75,9 +75,7 @@ const DataTable = ({ columData, tableData, tableHeading, tablePara }) => {
                         />
                     </ThemeProvider>
                 </div>
-
             </div>
-
         </div>
     )
 

@@ -5,8 +5,10 @@ import Forgotpassword from "../components/LoginComponents/Forgotpassword"
 import VerifyOTP from "../components/LoginComponents/VerifyOTP"
 import NewPassword from "../components/LoginComponents/NewPassword"
 import Dashbord from "../pages/Dashbord";
-import Employee from "../components/DashBord/Employee";
+import Employees from "../components/DashBord/Employees";
 import { DataProvider } from "../Context/DataContext";
+import Employee from "../components/DashBord/Employee";
+import MDashBord from '../components/DashBord/DashBord'
 
 const router = createBrowserRouter([
 
@@ -34,10 +36,20 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashbord",
-        element: <DataProvider><Dashbord /></DataProvider>,
-        children: [        
+        element: <MDashBord />,
+    },
+    {
+        path: "/dashbord/employee",
+        element: <DataProvider>
+                    <Dashbord />
+                </DataProvider>,
+        children: [                  
             {
-                path: "/dashbord/employee",
+                path: "/dashbord/employees",
+                element: <Employees />,
+            },
+            {
+                path: "/dashbord/employees/employee",
                 element: <Employee />,
             },
         ]
