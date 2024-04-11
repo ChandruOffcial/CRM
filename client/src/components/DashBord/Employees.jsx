@@ -1,9 +1,13 @@
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import DataTable from "./DataTable";
+import { useContext } from "react";
+import DataContext from "../../Context/DataContext";
 
 
 const Employees = () => {
+    const {handleEditEmployee } = useContext(DataContext)
+    
     const columns = [
         {
             name: "name",
@@ -35,10 +39,10 @@ const Employees = () => {
             options: {
                 filter: true,
                 sort: false,
-                customBodyRender: () =>
+                customBodyRender: (value, tableMeta) =>
                     <div className="flex gap-5 justify-center items-center  ">
-                        <FaEdit className="text-blue-600 h-6 w-6" />
-                        <MdDelete className="text-red-600 h-7 w-7" />
+                        <FaEdit className="text-blue-600 h-6 w-6 cursor-pointer" onClick={() => handleEditEmployee(tableMeta)} />
+                        <MdDelete className="text-red-600 h-7 w-7 cursor-pointer" />
                     </div>
             },
         },

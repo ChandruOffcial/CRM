@@ -60,9 +60,9 @@ const DataTable = ({ columData, tableData, tableHeading, tablePara }) => {
 
 
     return (
-        <div className="container mx-auto">
+        <div className="container mx-auto ">
             <div className="flex justify-center items-center flex-col">
-                <div className="mb-10">
+                <div className="mb-10 mt-8">
                     <h2 className="font-semibold text-xl text-center mb-2">{tableHeading}</h2>
                     <p className="text-center">{tablePara}</p>
                 </div>

@@ -15,7 +15,7 @@ const DropDown = () => {
     }
     return (                    
             <div className={`w-80 text-center bg-[#CBD0FF] rounded-b-3xl`} >
-                <ul className="divide-y divide-slate-200">
+                <ul className="divide-y divide-slate-200 dropDown_Menu">
                     {dropDownData.map((item, index) => (
                         <li key={index} className={`py-6 hover:bg-white font-medium text-xl cursor-pointer dashboard-item  ${index === menuValue ?'bg-white':''}`} onClick={()=>{handleMenu(index, item)}} >{item.name}</li>
                     ))}
