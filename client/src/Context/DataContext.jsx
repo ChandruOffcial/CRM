@@ -16,11 +16,11 @@ export const DataProvider = ({ children }) => {
     },
     {
       name: "Announcements",
-      route: "/dashboard/announcements",
+      route: "/dashbord/employee/announcements",
     },
     {
       name: "Attendance",
-      route: "/dashboard/attendance",
+      route: "/dashbord/employee/attendance",
     },
     {
       name: "Company documents",
